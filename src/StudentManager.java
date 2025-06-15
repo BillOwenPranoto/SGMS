@@ -18,7 +18,7 @@ public class StudentManager {
 
     // Multiple student handler
     private final Map<Integer, Student> studentsMap = new HashMap<>();
-    private int nextStudentId = 1000001;
+    private int nextStudentId = 100001;
 
     public void run() {
         loadStudentsFromFile();
@@ -201,9 +201,11 @@ public class StudentManager {
 
         if(!file.exists()) {
             System.out.println("No existing student file found under the name " + FILE_NAME + ", starting fresh.");
+            //System.out.println("Attempting to read file at: " + file.getAbsolutePath());
+            return;
         }
 
-        int highesetId = 0;
+        int highestId = 0;
 
         try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -211,11 +213,11 @@ public class StudentManager {
                 Student s = Student.fromFileString(line);
                 studentsMap.put(s.GetId(),s);
 
-                if (s.GetId() > highesetId) {
-                    highesetId = s.GetId();
+                if (s.GetId() > highestId) {
+                    highestId = s.GetId();
                 }
             }
-            nextStudentId = highesetId + 1;
+            nextStudentId = highestId + 1;
             System.out.println("Successfully loaded students from file.");
         } catch (IOException e) {
             System.out.println("Error loading student data: " + e.getMessage());
