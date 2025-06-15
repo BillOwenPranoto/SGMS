@@ -1,7 +1,9 @@
+package studentmanager;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -9,6 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Handles user interaction, file I/O, and high-level application logic
+ * for managing students and their grades via command-line interface.
+ */
 public class StudentManager {
     private static final String FILE_NAME = "listOfStudents.txt";
 
@@ -20,6 +26,10 @@ public class StudentManager {
     private final Map<Integer, Student> studentsMap = new HashMap<>();
     private int nextStudentId = 100001;
 
+    /**
+     * Starts the application loop, loading existing data and presenting
+     * menu options to the user.
+     */
     public void run() {
         loadStudentsFromFile();
         label:
@@ -52,6 +62,10 @@ public class StudentManager {
 
     }
 
+    /**
+     * Create a student from user's input in command line interface
+     * @return An object of student consisting of full names, and gender.
+     */
     private Student createStudentFromInput() {
         System.out.println("**Enter the student's First Name: ");
         String fName = scanner.nextLine().trim();
@@ -89,6 +103,10 @@ public class StudentManager {
         }
     }
 
+    /**
+     * Take a student object and assign their grades
+     * @param student The student's object
+     */
     private void enterGrades(Student student) {
         while (true) {
             System.out.println("\nAVAILABLE SUBJECTS: ");
@@ -139,6 +157,9 @@ public class StudentManager {
         System.out.print("Please enter your choice (1-4): ");
     }
 
+    /**
+     * Handles the Add student option in the menu by calling the createStudentFromInput() method.
+     */
     private void handleAddStudent() {
         Student student = createStudentFromInput();
         enterGrades(student);
@@ -147,6 +168,9 @@ public class StudentManager {
         nextStudentId++;
     }
 
+    /**
+     * Iterate through all the HashMap of students and display their full details.
+     */
     private void handleViewAllStudents() {
         if(studentsMap.isEmpty()) {
             System.out.println("\n-->No students currently on the list, please add at least one!<--");
@@ -161,6 +185,9 @@ public class StudentManager {
         }
     }
 
+    /**
+     * Handles the View A Student option in the menu by getting the unique identifier of the student.
+     */
     private void handleStudentLookUp() {
         if(studentsMap.isEmpty()) {
             System.out.println("\n-->No students currently on the list, please add at least one!<--");
@@ -185,6 +212,10 @@ public class StudentManager {
         }
     }
 
+    /**
+     * Saves all current student data to a file in CSV format.
+     * Overwrites the existing file if present.
+     */
     private void saveStudentsToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))){
             for (Student s : studentsMap.values()) {
@@ -196,6 +227,10 @@ public class StudentManager {
         }
     }
 
+    /**
+     * Loads student data from the save file if it exists.
+     * Reconstructs student objects and populates the students map.
+     */
     private void loadStudentsFromFile() {
         File file = new File(FILE_NAME);
 

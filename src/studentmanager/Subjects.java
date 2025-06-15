@@ -1,3 +1,8 @@
+package studentmanager;
+/**
+ * Enum representing all supported school subjects
+ * available for grading in the system.
+ */
 public enum Subjects {
     MATH("Mathematics"),
     ENGLISH("English"),

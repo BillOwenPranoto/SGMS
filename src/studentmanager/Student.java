@@ -1,18 +1,14 @@
+package studentmanager;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a student with personal information and subject grades.
+ * Each student is assigned a unique ID and may have grades recorded
+ * for multiple predefined subjects.
+ */
 public class Student {
 
-    /**
-     * Student class to handle student attributes. There are:
-     * 1. studentID = A mandatory field for student's unique identifier.
-     * 2. First name
-     * 3. Middle name, which can be left empty.
-     * 4. Last name
-     * 5. Gender (M,F,U)
-     * 6. And a EnumMap for the student's grades.
-     */
     private int studentId;
     private String firstName;
     private String middleName;
@@ -21,12 +17,28 @@ public class Student {
     private final EnumMap<Subjects, Float> studentGrades = new EnumMap<>(Subjects.class);
 
     /**
-     * Constructors and public functions for students
-     * GetFullDetails() : Retrieve student's full name, and the average grades.
-     * enterGrade(Subjects subject, float num) -> take the subject's name and the grade and assign it to a student.
-     * calculateAverageGrade() : return the average grade of a student.
-     * GetAverageGrade() : return a letter version of student's average grade.
+     * Constructs a student with full name and gender.
+     *
+     * @param id The unique student ID.
+     * @param fName The student's first name.
+     * @param mName The student's middle name (can be blank).
+     * @param lName The student's last name.
+     * @param gender The student's gender ('M', 'F', or 'U').
      */
+    public Student(int id, String fName, String mName, String lName, Character gender) {
+        this.studentId = id;
+        this.firstName = fName;
+        this.middleName = mName;
+        this.lastName = lName;
+        this.studentGender = gender;
+    }
+
+    public Student(int id,String fName, String lName, Character gender) {
+        this.studentId = id;
+        this.firstName = fName;
+        this.lastName = lName;
+        this.studentGender = gender;
+    }
 
     public Student(Character gender) {
         if(gender == 'F')
@@ -46,21 +58,6 @@ public class Student {
         }
     }
 
-    public Student(int id,String fName, String lName, Character gender) {
-        this.studentId = id;
-        this.firstName = fName;
-        this.lastName = lName;
-        this.studentGender = gender;
-    }
-
-    public Student(int id, String fName, String mName, String lName, Character gender) {
-        this.studentId = id;
-        this.firstName = fName;
-        this.middleName = mName;
-        this.lastName = lName;
-        this.studentGender = gender;
-    }
-
     public void GetFullDetails() {
         System.out.println("Student ID: " + this.GetId());
         System.out.println("First Name:" + this.firstName);
@@ -76,6 +73,13 @@ public class Student {
         System.out.println(this.firstName + "'s average grade: " + this.GetAverageGrade());
     }
 
+    /**
+     * Adds or updates a grade for a given subject.
+     *
+     * @param subject The subject to assign a grade for.
+     * @param num The grade value (0–100).
+     * @throws IllegalArgumentException if grade is out of valid range.
+     */
     public void enterGrade(Subjects subject, float num) throws IllegalArgumentException {
         if (num < 0 || num > 100) {
             throw new IllegalArgumentException("Grade must be between 0 and 100.");
@@ -108,6 +112,10 @@ public class Student {
         return total / studentGrades.size();
     }
 
+    /**
+     * Determine the alphabetical grade based on the student's average grade
+     * @return A letter e.g A,B,C,F or N based on the average grade.
+     */
     public Character GetAverageGrade() {
         char letter = ' ';
 
@@ -138,9 +146,11 @@ public class Student {
         }
     }
 
-
-    // Handling File I/O
-
+    /**
+     * Converts the student data into a CSV-compatible string for saving to file.
+     *
+     * @return A single-line string representing the student and their grades.
+     */
     public String toFileString() {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -164,6 +174,13 @@ public class Student {
         return stringBuilder.toString();
     }
 
+    /**
+     * Reconstructs a Student object from a line in the file.
+     *
+     * @param line A comma-separated string in the expected file format.
+     * @return A Student object with parsed values and grades.
+     * @throws IllegalArgumentException if format is invalid or enum parsing fails.
+     */
     public static Student fromFileString(String line) {
 
         String[] parts = line.split(",");
